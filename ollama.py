@@ -1,6 +1,7 @@
 import json
 import requests
 
+from utils.logger import logger
 from utils import config
 
 ollama_url = config.get_config("server", "ollama_url")
@@ -13,9 +14,8 @@ def get_prompt_template():
     with open("modelfile/promptTemplate.txt", "r") as f:
         return f.read()
 
-
 def get_response(prompt):
-    print(f"generating response: {prompt}")
+    logger.info(f"Generating response for prompt: {prompt}")
     headers = {
         "Content-Type": "application/json",
     }
@@ -40,6 +40,14 @@ def get_response(prompt):
             "top_p": config.get_config("model", "top_p", float),
         }
     }
-    response = requests.post(ollama_url, headers=headers, json=data)
-    print(response.json())
-    return response.json()["response"]
+    response_content = "bruh 又出bug了，快點叫曉明弄好啦，他又在睡噢"
+    try:
+        response = requests.post(ollama_url, headers=headers, json=data).json()
+        response_content = response["response"]
+        logger.info(f"Generation complete: {response_content}")
+        return response_content
+    except KeyError:
+        logger.exception(f"Error occured when generating response\n{response['error']}")
+    except Exception:
+        logger.exception("Uncaught exception")
+    return response_content
