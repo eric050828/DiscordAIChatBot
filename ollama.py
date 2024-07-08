@@ -6,10 +6,12 @@ from utils import config
 ollama_url = config.get_config("server", "ollama_url")
 
 def get_system_prompt():
-    return
+    with open("modelfile/systemPrompt.txt", "r") as f:
+        return f.read()
 
 def get_prompt_template():
-    return
+    with open("modelfile/promptTemplate.txt", "r") as f:
+        return f.read()
 
 
 def get_response(prompt):
@@ -21,7 +23,8 @@ def get_response(prompt):
         "prompt": prompt,
         "model": config.get_config("model", "model_name"),
         "stream": False,
-        # "system": ,
+        "system": get_system_prompt(),
+        "template": get_prompt_template(),
         "options": {
             "mirostat": config.get_config("model", "mirostat", int),
             "mirostat_eta": config.get_config("model", "mirostat_eta", float),

@@ -12,6 +12,6 @@ class Client(discord.Client):
         if message.author == self.user:
             return
         if self.user in message.mentions:
-            prompt = "".join(message.content.split(" ")[1:])
+            prompt = " ".join(message.content.split(" ")[1:])
             response = get_response(prompt)
             await message.channel.send(response)
