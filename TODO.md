@@ -7,7 +7,7 @@
 # Conversation
 [] short term memory
 [] long term memory
-[] fine-tune base model
+[] fine-tune based model
 
 # Others
 [] add live2D

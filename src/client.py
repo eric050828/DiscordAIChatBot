@@ -3,7 +3,7 @@ from discord import Message
 from discord.ext import commands
 
 from utils.logger import logger
-from ollama import get_response
+from src.ollama import get_response
 
 class Client(discord.Client):
     def __init__(self, *args, **kwargs):

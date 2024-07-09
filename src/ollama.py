@@ -1,17 +1,18 @@
 import json
 import requests
 
-from utils.logger import logger
 from utils import config
+from utils.logger import logger
+from utils.path import path
 
 ollama_url = config.get_config("server", "ollama_url")
 
 def get_system_prompt():
-    with open("modelfile/systemPrompt.txt", "r") as f:
+    with open(path("modelfile", "systemPrompt.txt"), "r") as f:
         return f.read()
 
 def get_prompt_template():
-    with open("modelfile/promptTemplate.txt", "r") as f:
+    with open(path("modelfile", "promptTemplate.txt"), "r") as f:
         return f.read()
 
 def get_response(prompt):

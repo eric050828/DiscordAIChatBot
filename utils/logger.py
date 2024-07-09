@@ -3,12 +3,12 @@ from datetime import datetime
 from loguru import logger
 
 from .config import get_config
-
+from .path import path
 
 log_folder = get_config("logger", "folder")
 
 logger.add(
-    sink=f"{log_folder}/{{time:YYYY-MM-DD}}.log",
+    sink=path(log_folder, "{time:YYYY-MM-DD}.log"),
     format="{time:MM-DD HH:mm:ss} {level} {message}",
     level="INFO",
     serialize=True,

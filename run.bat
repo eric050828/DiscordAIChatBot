@@ -1,2 +1,3 @@
-.\.venv\Scripts\python.exe main.py
+set PYTHONPATH=%cd%
+.\.venv\Scripts\python.exe src\main.py
 pause

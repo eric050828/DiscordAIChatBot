@@ -4,9 +4,10 @@ from dotenv import load_dotenv
 import discord
 
 from client import Client
+from utils.path import path
 
 
-load_dotenv(".env")
+load_dotenv(path(".env"))
 token = os.getenv("TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
