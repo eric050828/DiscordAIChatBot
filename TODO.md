@@ -5,7 +5,9 @@
 [] docker deployment
 
 # Conversation
-[] short term memory
+[0.5] remember anyone
+[] images avaliable
+[X] short term memory
 [] long term memory
 [] fine-tune based model
 
