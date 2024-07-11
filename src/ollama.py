@@ -6,7 +6,7 @@ from utils import config
 from utils.logger import logger
 from utils.path import path
 
-ollama_url = config.get_config("defualt", "ollama_url")
+ollama_url = config.get_config("default", "ollama_url")
 memory = Memory()
 
 def get_system_prompt(username: str):
@@ -18,12 +18,13 @@ def get_system_prompt(username: str):
         with open(path("modelfile", "characterInfomations", f"{username}.txt"), "r") as info_file:
             infomation = info_file.read()
     else:
+        logger.warning("Not found character info, path: '{}'")
         infomation = "你還不知道這個人的相關訊息"
-    return system_prompt.format({
-                "username": username,
-                "infomation": infomation,
-                "persona": persona
-            })
+    return system_prompt.format(
+                username=username,
+                infomation=infomation,
+                persona=persona
+            )
 
 def get_prompt_template():
     with open(path("modelfile", "promptTemplate.txt"), "r") as f:
@@ -32,14 +33,16 @@ def get_prompt_template():
 def get_prompt(username, prompt):
     final_prompt = "{username}: {prompt}"
 
-    return final_prompt.format(username, prompt)
+    return final_prompt.format(
+        username=username,
+        prompt=prompt
+    )
 
 def get_context(query):
     return 
 
 def get_response(username: str, prompt: str, images: list, stream: bool = False):
     prompt = get_prompt(username, prompt)
-    logger.info(f"Generating response for prompt: {prompt}")
     headers = {
         "Content-Type": "application/json",
     }
@@ -47,7 +50,7 @@ def get_response(username: str, prompt: str, images: list, stream: bool = False)
         "prompt": prompt,
         "model": config.get_config("model", "model_name"),
         "stream": stream,
-        "system": get_system_prompt(),
+        "system": get_system_prompt(username),
         "template": get_prompt_template(),
         "context": [],  # TODO: fill the chat history: [{"role": "", "content": ""}]
         "options": {
@@ -67,6 +70,7 @@ def get_response(username: str, prompt: str, images: list, stream: bool = False)
         }
     }
     response_content = "bruh 又出bug了，快點叫曉明弄好啦，他又在睡噢"
+    logger.info(f"Generating response for system prompt: {data['system']}\nprompt: {data['prompt']}")
     try:
         response = requests.post(ollama_url, headers=headers, json=data).json()
         response_content = response["response"]

@@ -5,7 +5,9 @@
 [] docker deployment
 
 # Conversation
-[0.5] remember anyone
+[] remember anyone
+    [X] known info of someone according exist txt
+    [] auto modify character info by herself
 [] images avaliable
 [X] short term memory
 [] long term memory

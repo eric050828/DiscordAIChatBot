@@ -14,7 +14,7 @@ ENTRY_TYPE = NewType("ENTRY_TYPE", Literal["chatHistory"])
 class Memory:
     def __init__(self) -> None:
         self.client = PersistentClient(path(memory_path))
-        self.collection = self.client.get_or_create_collection(path(memory_path))
+        self.collection = self.client.get_or_create_collection("memory")
         self.chat_history = []
         
     def entry_exist(self, type: ENTRY_TYPE, identifier: str) -> bool:
