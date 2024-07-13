@@ -9,21 +9,18 @@ from utils.path import path
 ollama_url = config.get_config("default", "ollama_url")
 memory = Memory()
 
-def get_system_prompt(username: str):
+def get_system_prompt(user, prompt):
     with open(path("modelfile", "systemPrompt.txt"), "r") as system_file:
         system_prompt = system_file.read()
     with open(path("modelfile", "persona.txt"), "r") as persona_file:  # TODO: change to save in chromaDB
         persona =  persona_file.read()
-    if os.path.exists(path("modelfile", "characterInfomations", f"{username}.txt")):
-        with open(path("modelfile", "characterInfomations", f"{username}.txt"), "r") as info_file:
-            infomation = info_file.read()
-    else:
-        logger.warning("Not found character info, path: '{}'")
-        infomation = "你還不知道這個人的相關訊息"
+    user_query_results = memory.query_memory([prompt], "chatHistory", str(user.id), 3)
+    model_query_results = memory.query_memory([prompt], "chatHistory", memory.name, 3)
     return system_prompt.format(
-                username=username,
-                infomation=infomation,
-                persona=persona
+                username=user.name,
+                persona=persona,
+                user_query_results=user_query_results,
+                model_query_results=model_query_results,
             )
 
 def get_prompt_template():
@@ -41,7 +38,7 @@ def get_prompt(username, prompt):
 def get_context(query):
     return 
 
-def get_response(user: str, prompt: str, images: list, stream: bool = False):
+def get_response(user, prompt: str, images: list, stream: bool = False):
     headers = {
         "Content-Type": "application/json",
     }
@@ -49,7 +46,7 @@ def get_response(user: str, prompt: str, images: list, stream: bool = False):
         "prompt": get_prompt(user.name, prompt),
         "model": config.get_config("model", "model_name"),
         "stream": stream,
-        "system": get_system_prompt(user.name),
+        "system": get_system_prompt(user, prompt),
         "template": get_prompt_template(),
         "context": memory.context,
         "options": {

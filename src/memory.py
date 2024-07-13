@@ -66,8 +66,42 @@ class Memory:
         else:
             self.create_entry(type, identifier, content)
     
-    def query_context():  # TODO: get long-term memory
-        pass
+    def query_memory(
+            self,
+            queries: list[str],
+            type: ENTRY_TYPE|None = None,
+            identifier: str|None = None,
+            n_results: int = 1,
+            max_distance: float = 0.6):
+        result = None
+        if type is None:
+            result = self.collection.query(query_texts=queries, n_results=n_results)
+        else:
+            if identifier is None:
+                result = self.collection.query(
+                    query_texts=queries,
+                    where={"type": {"$eq": type}},
+                    n_results=n_results
+                )
+            else:
+                result = self.collection.query(
+                    query_texts=queries,
+                    where={"$and" : [
+                            {"type" : {"$eq" : type}},
+                            {"identifier" : {"$eq" : identifier}}
+                        ]
+                    },
+                    n_results=n_results
+                )
+        if result is not None:
+            filtered_documents = []
+            for i, distance in enumerate(result["distances"][0]):
+                if distance > max_distance: continue
+                filtered_documents += result["documents"][0][i]
+            logger.info(f"query result: {result}")
+            return filtered_documents
+        logger.warning("No result")
+        return result
     
     def save_chat(self, role, content):
         if len(self.chat_history) > chat_history_length:

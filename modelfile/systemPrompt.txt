@@ -2,7 +2,9 @@
 
 你的角色: {persona}
 
-{username}的資訊: {infomation}
+{username}曾說過相關的話: {user_query_results}
+
+你曾說過相關的話: {model_query_results}
 
 ###
 你的任務是遵守以下規則。
