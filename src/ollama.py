@@ -52,7 +52,7 @@ def get_response(username: str, prompt: str, images: list, stream: bool = False)
         "stream": stream,
         "system": get_system_prompt(username),
         "template": get_prompt_template(),
-        "context": [],  # TODO: fill the chat history: [{"role": "", "content": ""}]
+        "context": memory.context,
         "options": {
             "mirostat": config.get_config("model", "mirostat", int),
             "mirostat_eta": config.get_config("model", "mirostat_eta", float),
@@ -74,9 +74,10 @@ def get_response(username: str, prompt: str, images: list, stream: bool = False)
     try:
         response = requests.post(ollama_url, headers=headers, json=data).json()
         response_content = response["response"]
+        logger.info(f"Generation complete: {response_content}")
         memory.save_chat("user", prompt)
         memory.save_chat("assistant", response_content)
-        logger.info(f"Generation complete: {response_content}")
+        memory.context = response["context"]
         return response_content
     
     except KeyError:

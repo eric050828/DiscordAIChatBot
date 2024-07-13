@@ -16,6 +16,7 @@ class Memory:
         self.client = PersistentClient(path(memory_path))
         self.collection = self.client.get_or_create_collection("memory")
         self.chat_history = []
+        self.context = []
         
     def entry_exist(self, type: ENTRY_TYPE, identifier: str) -> bool:
         if self.collection.get(
