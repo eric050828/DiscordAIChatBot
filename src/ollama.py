@@ -41,16 +41,15 @@ def get_prompt(username, prompt):
 def get_context(query):
     return 
 
-def get_response(username: str, prompt: str, images: list, stream: bool = False):
-    prompt = get_prompt(username, prompt)
+def get_response(user: str, prompt: str, images: list, stream: bool = False):
     headers = {
         "Content-Type": "application/json",
     }
     data = {
-        "prompt": prompt,
+        "prompt": get_prompt(user.name, prompt),
         "model": config.get_config("model", "model_name"),
         "stream": stream,
-        "system": get_system_prompt(username),
+        "system": get_system_prompt(user.name),
         "template": get_prompt_template(),
         "context": memory.context,
         "options": {
@@ -77,6 +76,8 @@ def get_response(username: str, prompt: str, images: list, stream: bool = False)
         logger.info(f"Generation complete: {response_content}")
         memory.save_chat("user", prompt)
         memory.save_chat("assistant", response_content)
+        memory.update_or_create_entry("chatHistory", str(user.id), prompt)
+        memory.update_or_create_entry("chatHistory", memory.name, response_content)
         memory.context = response["context"]
         return response_content
     

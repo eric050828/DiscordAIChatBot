@@ -2,7 +2,7 @@ import discord
 from discord import Message
 from discord.ext import commands
 
-from ollama import get_response, memory
+from ollama import get_response
 from utils.logger import logger
 
 class Client(discord.Client):
@@ -15,12 +15,12 @@ class Client(discord.Client):
     async def on_message(self, message: Message):
         if message.author == self.user:
             return
-        memory.save_chat("user", message.content)
+        
         if self.user in message.mentions:
             logger.info(f"{message.author}: {message.content}")
             prompt = " ".join(message.content.split(" ")[1:])
             response = get_response(
-                username=message.author,
+                user=message.author,
                 prompt=prompt,
                 images=message.attachments,
             )

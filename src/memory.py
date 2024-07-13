@@ -9,10 +9,11 @@ from utils.path import path
 
 memory_path = get_config("default", "memory_path")
 chat_history_length = get_config("default", "chat_history_length")
-ENTRY_TYPE = NewType("ENTRY_TYPE", Literal["chatHistory"])
+ENTRY_TYPE = Literal["chatHistory"]
 
 class Memory:
     def __init__(self) -> None:
+        self.name = "smallYauyu"
         self.client = PersistentClient(path(memory_path))
         self.collection = self.client.get_or_create_collection("memory")
         self.chat_history = []
@@ -26,7 +27,7 @@ class Memory:
                     ]
                 })['documents']:
             return True
-        logger.error(f"No entry of type '{type}' with identifier '{identifier}' was found in the database.")
+        logger.warning(f"No entry of type '{type}' with identifier '{identifier}' was found in the database.")
         return False
     
     def get_id(self, type: ENTRY_TYPE, identifier: str):
@@ -41,22 +42,22 @@ class Memory:
     
     def update_entry(self, type: ENTRY_TYPE, identifier: str, content: str) -> bool:
         if not self.entry_exist(type, identifier):
-            logger.error(f"Could not update entry with type '{type}' and identifier '{identifier}' as none was found.")
+            logger.warning(f"Could not update entry with type '{type}' and identifier '{identifier}' as none was found.")
             return False
         self.collection.update(ids=self.get_id(type=type, identifier=identifier), documents=content)
-        logger.log(f"Update entry with type '{type}' and identifier '{identifier}' success.")
+        logger.info(f"Update entry with type '{type}' and identifier '{identifier}' success.")
         return True
     
     def create_entry(self, type: ENTRY_TYPE, identifier: str, content: str) -> bool:
         if self.entry_exist(type, identifier):
-            logger.error(f"Entry of type '{type}' with identifier '{identifier}' already exists in database.")
+            logger.warning(f"Entry of type '{type}' with identifier '{identifier}' already exists in database.")
             return False
         self.collection.add(
             ids=[str(self.collection.count()+1)],
             metadatas=[{"type" : type, "identifier" : identifier}],
             documents=content
         )
-        logger.log(f"New entry with id '{self.collection.count()}' has been created.")
+        logger.info(f"New entry with id '{self.collection.count()}' has been created.")
         return True
     
     def update_or_create_entry(self, type: ENTRY_TYPE, identifier: str, content: str) -> None:
