@@ -1,5 +1,5 @@
 import os
-import requests
+import aiohttp
 
 from memory import Memory
 from utils import config
@@ -14,8 +14,8 @@ def get_system_prompt(user, prompt):
         system_prompt = system_file.read()
     with open(path("modelfile", "persona.txt"), "r") as persona_file:  # TODO: change to save in chromaDB
         persona =  persona_file.read()
-    user_query_results = memory.query_memory([prompt], "chatHistory", str(user.id), 3)
-    model_query_results = memory.query_memory([prompt], "chatHistory", memory.name, 3)
+    user_query_results = memory.query_memory([prompt], "chatHistory", str(user.id))
+    model_query_results = memory.query_memory([prompt], "chatHistory", memory.name)
     return system_prompt.format(
                 username=user.name,
                 persona=persona,
@@ -38,7 +38,7 @@ def get_prompt(username, prompt):
 def get_context(query):
     return 
 
-def get_response(user, prompt: str, images: list, stream: bool = False):
+async def get_response(user, prompt: str, images: list, stream: bool = False):
     headers = {
         "Content-Type": "application/json",
     }
@@ -49,6 +49,7 @@ def get_response(user, prompt: str, images: list, stream: bool = False):
         "system": get_system_prompt(user, prompt),
         "template": get_prompt_template(),
         "context": memory.context,
+        "images": images,
         "options": {
             "mirostat": config.get_config("model", "mirostat", int),
             "mirostat_eta": config.get_config("model", "mirostat_eta", float),
@@ -68,15 +69,17 @@ def get_response(user, prompt: str, images: list, stream: bool = False):
     response_content = "bruh 又出bug了，快點叫曉明弄好啦，他又在睡噢"
     logger.info(f"Generating response for system prompt: {data['system']}\nprompt: {data['prompt']}")
     try:
-        response = requests.post(ollama_url, headers=headers, json=data).json()
-        response_content = response["response"]
-        logger.info(f"Generation complete: {response_content}")
-        memory.save_chat("user", prompt)
-        memory.save_chat("assistant", response_content)
-        memory.update_or_create_entry("chatHistory", str(user.id), prompt)
-        memory.update_or_create_entry("chatHistory", memory.name, response_content)
-        memory.context = response["context"]
-        return response_content
+        async with aiohttp.ClientSession() as session:
+            async with session.post(ollama_url, json=data) as resp:
+                response = await resp.json()
+                response_content = response["response"]
+                logger.info(f"Generation complete: {response_content}")
+                memory.save_chat("user", prompt)
+                memory.save_chat("assistant", response_content)
+                memory.create_entry("chatHistory", str(user.id), prompt)
+                memory.create_entry("chatHistory", memory.name, response_content)
+                memory.context = response["context"]
+                return response_content
     
     except KeyError:
         logger.exception(f"Error occured when generating response\n{response['error']}")

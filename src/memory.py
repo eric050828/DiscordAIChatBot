@@ -49,9 +49,9 @@ class Memory:
         return True
     
     def create_entry(self, type: ENTRY_TYPE, identifier: str, content: str) -> bool:
-        if self.entry_exist(type, identifier):
-            logger.warning(f"Entry of type '{type}' with identifier '{identifier}' already exists in database.")
-            return False
+        # if self.entry_exist(type, identifier):
+        #     logger.warning(f"Entry of type '{type}' with identifier '{identifier}' already exists in database.")
+        #     return False
         self.collection.add(
             ids=[str(self.collection.count()+1)],
             metadatas=[{"type" : type, "identifier" : identifier}],
@@ -71,7 +71,7 @@ class Memory:
             queries: list[str],
             type: ENTRY_TYPE|None = None,
             identifier: str|None = None,
-            n_results: int = 1,
+            n_results: int = 10,
             max_distance: float = 0.6):
         result = None
         if type is None:
@@ -97,7 +97,7 @@ class Memory:
             filtered_documents = []
             for i, distance in enumerate(result["distances"][0]):
                 if distance > max_distance: continue
-                filtered_documents += result["documents"][0][i]
+                filtered_documents.append(result["documents"][0][i])
             logger.info(f"query result: {result}")
             return filtered_documents
         logger.warning("No result")
