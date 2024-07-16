@@ -7,7 +7,7 @@ from utils.logger import logger
 from utils.path import path
 
 
-memory_path = get_config("default", "memory_path")
+memory_path = get_config("path", "memory")
 chat_history_length = get_config("default", "chat_history_length")
 ENTRY_TYPE = Literal["chatHistory"]
 

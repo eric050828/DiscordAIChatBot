@@ -6,7 +6,7 @@ from utils import config
 from utils.logger import logger
 from utils.path import path
 
-ollama_url = config.get_config("default", "ollama_url")
+ollama_url = config.get_config("server", "ollama")
 memory = Memory()
 
 def get_system_prompt(user, prompt):
