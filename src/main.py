@@ -11,6 +11,7 @@ load_dotenv(path(".env"))
 token = os.getenv("TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
+intents.voice_states = True
 
-client = Client(intents=intents)
+client = Client(command_prefix="/", intents=intents)
 client.run(token)

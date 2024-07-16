@@ -1,5 +1,7 @@
 # Features
 [] slash commands
+    [X] `/info` - show bot info
+    [X] `/join` - add bot to voice channel
     [] `/connection` - show ollama connection status
     [] `/log date` - show the log for specified date
 [] docker deployment
