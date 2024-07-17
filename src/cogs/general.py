@@ -3,7 +3,6 @@ from discord import app_commands, Interaction
 from discord.ext import commands
 
 from utils.logger import logger
-from utils.path import path
 
 
 class GeneralCog(commands.Cog):

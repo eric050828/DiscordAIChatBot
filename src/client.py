@@ -5,6 +5,7 @@ from discord import Message
 from discord.ext import commands
 
 from ollama import get_response
+from voice import speech
 from utils.logger import logger
 from utils.path import path
 
@@ -41,4 +42,5 @@ class Client(commands.Bot):
                 images=images,
             )
             await message.channel.send(response)
+            await speech(self, response)
         await self.process_commands(message)

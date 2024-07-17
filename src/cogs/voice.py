@@ -18,7 +18,7 @@ class VoiceCog(commands.Cog):
         try:
             channel = interaction.user.voice.channel
             await channel.connect()
-            await interaction.response.send_message(discord.utils.get(interaction.guild.emojis, name=":HI:"))
+            # await interaction.response.send_message(interaction.guild.get_emoji(1143919502032122006))
         except:
             logger.error("Voice channel not found")
             await interaction.response.send_message("bruh 你還沒進語音 我進不去啦")
