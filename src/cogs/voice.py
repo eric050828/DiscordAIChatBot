@@ -15,17 +15,22 @@ class VoiceCog(commands.Cog):
     
     @app_commands.command(name="join", description="add the bot to the voice channel you are in")
     async def join(self, interaction: Interaction):
-        try:
-            channel = interaction.user.voice.channel
-            await channel.connect()
-            # await interaction.response.send_message(interaction.guild.get_emoji(1143919502032122006))
-        except:
+        channel = interaction.user.voice.channel
+        if channel is None:
             logger.error("Voice channel not found")
             await interaction.response.send_message("bruh 你還沒進語音 我進不去啦")
+            return
+        if self.bot.voice_clients:
+            await self.bot.voice_clients[0].move_to(channel)
+        else:
+            vc = await channel.connect()
+            vc.move_to(channel)
+        await interaction.response.send_message(interaction.guild.get_emoji(1143919502032122006))
 
     @app_commands.command(name="leave", description="kick the bot from the current voice channel")
     async def leave(self, interaction: Interaction):
-        pass
+        if self.bot.voice_clients:
+            await self.bot.voice_clients[0].disconnect()
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(VoiceCog(bot))

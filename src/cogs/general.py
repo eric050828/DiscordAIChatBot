@@ -26,6 +26,10 @@ class GeneralCog(commands.Cog):
         embed.add_field(name="曉明", value="bruh", inline=True)
         await interaction.response.send_message(embed=embed)
     
+    @app_commands.command(name="test", description="for dev testing")
+    async def test(self, interaction: Interaction):
+        pass
+            
     # this will cause duplicate register
     # def cog_load(self):
     #     self.bot.tree.add_command(self.hello)

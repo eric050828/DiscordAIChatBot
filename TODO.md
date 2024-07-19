@@ -19,4 +19,10 @@
 [] add live2D
 [] add tts
     [X] train model
-    [] deployment
+    [X] deployment
+    [] improve voice model
+[] GUI
+    [] dashboard
+    [] settings
+[] refactor
+    [] refactor config
