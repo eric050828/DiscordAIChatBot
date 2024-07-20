@@ -2,7 +2,7 @@ import discord
 from discord import app_commands, Interaction
 from discord.ext import commands
 
-from utils.logger import logger
+from logger import logger
 
 
 class GeneralCog(commands.Cog):

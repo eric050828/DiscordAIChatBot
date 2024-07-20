@@ -1,14 +1,14 @@
-from typing import NewType, Literal
+from typing import Literal
 
 from chromadb import PersistentClient
 
-from utils.config import get_config
-from utils.logger import logger
+from config import config
+from logger import logger
 from utils.path import path
 
 
-memory_path = get_config("path", "memory")
-chat_history_length = get_config("default", "chat_history_length")
+memory_path = config.path.memory
+chat_history_length = config.general.chat_history_length
 ENTRY_TYPE = Literal["chatHistory"]
 
 class Memory:

@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from ollama import get_response
 from voice import speech
-from utils.logger import logger
+from logger import logger
 from utils.path import path
 
 

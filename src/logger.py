@@ -1,11 +1,9 @@
-from datetime import datetime
-
 from loguru import logger
 
-from .config import get_config
-from .path import path
+from config import config
+from utils.path import path
 
-log_folder = get_config("logger", "folder")
+log_folder = config.logger.folder
 
 logger.add(
     sink=path(log_folder, "{time:YYYY-MM-DD}.log"),

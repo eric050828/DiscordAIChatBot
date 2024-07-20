@@ -4,12 +4,12 @@ import aiohttp
 from discord import VoiceClient, FFmpegPCMAudio, FFmpegOpusAudio
 from discord.ext import commands
 
-from utils.logger import logger
-from utils.config import get_config
+from logger import logger
+from config import config
 from utils.path import path
 
 
-api_url = get_config("server", "gpt_sovits")
+api_url = config.server.gpt_sovits
 
 async def speech(bot: commands.Bot, text: str):  # TODO: refactor
     if not bot.voice_clients:
@@ -23,9 +23,9 @@ async def speech(bot: commands.Bot, text: str):  # TODO: refactor
     data = {
         "text": text,                 # str.(required) text to be synthesized
         "text_lang": "zh",            # str.(required) language of the text to be synthesized
-        "ref_audio_path": get_config("voice", "ref_audio_path"),  # str.(required) reference audio path
-        "prompt_text": "私人文字頻道加上私人語音頻道",            # str.(optional) prompt text for the reference audio
-        "prompt_lang": "zh",            # str.(required) language of the prompt text for the reference audio
+        "ref_audio_path": config.voice.ref_audio_path,  # str.(required) reference audio path
+        "prompt_text": config.voice.prompt_text,            # str.(optional) prompt text for the reference audio
+        "prompt_lang": config.voice.prompt_lang,            # str.(required) language of the prompt text for the reference audio
         "top_k": 5,                   # int. top k sampling
         "top_p": 1,                   # float. top p sampling
         "temperature": 1,             # float. temperature for sampling
