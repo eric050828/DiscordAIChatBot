@@ -164,5 +164,8 @@ class GUI(ctk.CTk):
             
 
 if __name__ == "__main__":
-    gui = GUI()
-    gui.mainloop()
+    try:
+        gui = GUI()
+        gui.mainloop()
+    except:
+        gui.stop_bot_event()

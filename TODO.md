@@ -21,8 +21,8 @@
     [X] train model
     [X] deployment
     [] improve voice model
-[] GUI
-    [] dashboard
-    [] settings
+[X] GUI
+    [X] dashboard
+    [X] settings
 [] refactor
     [] refactor config
