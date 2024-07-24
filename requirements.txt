@@ -17,6 +17,9 @@ chromadb==0.5.3
 click==8.1.7
 colorama==0.4.6
 coloredlogs==15.0.1
+CTkMessagebox==2.7
+customtkinter==5.2.2
+darkdetect==0.8.0
 Deprecated==1.2.14
 discord.py==2.4.0
 dnspython==2.6.1
@@ -66,6 +69,7 @@ opentelemetry-util-http==0.46b0
 orjson==3.10.6
 overrides==7.7.0
 packaging==24.1
+pillow==10.4.0
 posthog==3.5.0
 protobuf==4.25.3
 pyasn1==0.6.0

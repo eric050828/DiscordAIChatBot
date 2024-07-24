@@ -1,10 +1,12 @@
+import sys
+
 from loguru import logger
 
 from config import config
 from utils.path import path
 
-log_folder = config.logger.folder
-
+log_folder = config.path.log
+logger.remove(0)
 logger.add(
     sink=path(log_folder, "{time:YYYY-MM-DD}.log"),
     format="{time:MM-DD HH:mm:ss} {level} {message}",
@@ -20,6 +22,9 @@ logger.add(
 )
 
 logger.add(
-    sink=lambda message: "<green>{message.time:MM-DD HH:mm:ss}</green> <level>{message}<level>",
-    colorize=True,
+    sink=sys.stdout,
+    format="<green>[{time:MM-DD HH:mm:ss}]</green> |{level:^9s}| <level>{message}</level>",
+    level="INFO",
+    backtrace=False,
+    colorize=True
 )

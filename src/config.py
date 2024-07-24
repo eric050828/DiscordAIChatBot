@@ -20,8 +20,8 @@ class SectionContent:
 
     def __post_init__(self):
         for section_content_k, section_content_v in self.raw_section_content:
-            if boolean := section_content_v.lower() in ("true", "false"):
-                section_content_v = boolean
+            if section_content_v.lower() in ("true", "false"):
+                section_content_v = section_content_v.lower() == "true"
             elif section_content_v.isdigit():
                 section_content_v = int(section_content_v)
             else:
