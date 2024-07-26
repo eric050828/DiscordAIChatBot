@@ -9,9 +9,9 @@ ollama_url = config.server.ollama
 memory = Memory()
 
 def get_system_prompt(user, prompt):
-    with open(path("modelfile", "systemPrompt.txt"), "r") as system_file:
+    with open(path("modelfile", "systemPrompt.txt"), "r", encoding="utf-8") as system_file:
         system_prompt = system_file.read()
-    with open(path("modelfile", "persona.txt"), "r") as persona_file:  # TODO: change to save in chromaDB
+    with open(path("modelfile", "persona.txt"), "r", encoding="utf-8") as persona_file:  # TODO: change to save in chromaDB
         persona =  persona_file.read()
     user_query_results = memory.query_memory([prompt], "chatHistory", str(user.id))
     model_query_results = memory.query_memory([prompt], "chatHistory", memory.name)
@@ -23,7 +23,7 @@ def get_system_prompt(user, prompt):
             )
 
 def get_prompt_template():
-    with open(path("modelfile", "promptTemplate.txt"), "r") as f:
+    with open(path("modelfile", "promptTemplate.txt"), "r", encoding="utf-8") as f:
         return f.read()
 
 def get_prompt(username, prompt):

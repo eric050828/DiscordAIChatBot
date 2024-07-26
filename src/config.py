@@ -37,7 +37,7 @@ class Config(Sections):
         Sections.__init__(self, raw_config_parser)
         
     def save(self):
-        with open(path("config.ini"), "w") as configfile:
+        with open(path("config.ini"), "w", encoding="utf-8") as configfile:
             self.parser.write(configfile)
 
 parser = ConfigParser()
