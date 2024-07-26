@@ -28,7 +28,7 @@ class GeneralCog(commands.Cog):
     
     @app_commands.command(name="test", description="for dev testing")
     async def test(self, interaction: Interaction):
-        pass
+        await interaction.response.send_message("complete", ephemeral=True)
             
     # this will cause duplicate register
     # def cog_load(self):

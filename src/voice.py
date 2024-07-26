@@ -1,8 +1,11 @@
 import asyncio
 import io
 import aiohttp
+
 from discord import VoiceClient, FFmpegPCMAudio, FFmpegOpusAudio
 from discord.ext import commands
+from pydub import AudioSegment
+from pydub.playback import play
 
 from logger import logger
 from config import config
@@ -71,3 +74,8 @@ async def speech(bot: commands.Bot, text: str):  # TODO: refactor
                     ))
                     while vc.is_playing():
                         await asyncio.sleep(1)
+                        
+async def play_wav():
+    audio = AudioSegment.from_wav(path("output", "speech.wav"))
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, play, audio)
